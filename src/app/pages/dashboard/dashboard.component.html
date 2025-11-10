@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col-md-12 col-xxxl-6">
+
+        <mat-card class="trinta-card number-card mb-25 bg-white border-none d-block">
+            <mat-card-content>
+                <i class="ri-list-unordered big-icons"></i>
+                <div class="ctn-numbers">            
+                    <h5 class="mt-0 mb-5 pl-0">
+                        Totale ordini
+                    </h5>
+                    <h3 *ngIf="loaded">
+                        {{orders}}
+                    </h3>
+                    <h4 *ngIf="!loaded">
+                        <i class="ri-refresh-line rotate"></i>
+                    </h4>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-md-12 col-xxxl-6">
+        <mat-card class="trinta-card number-card card-alert mb-25 bg-white border-none d-block">
+            <mat-card-content>
+                <i class="ri-list-unordered big-icons"></i>    
+                <div class="ctn-numbers">            
+                    <h5 class="mt-0 mb-5 pl-0">
+                        Totale preventivi in attesa
+                    </h5>
+                    <h3 *ngIf="loaded">
+                        {{quotations}}
+                    </h3>
+                    <h4 *ngIf="!loaded">
+                        <i class="ri-refresh-line rotate"></i>
+                    </h4>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxxl-12">
+        <mat-card class="trinta-card balance-overview-card mb-25 bg-white border-none d-block" style="min-height: 550px;">
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mt-0 mb-15 pl-0">
+                        Ordini del {{y}}
+                    </h5>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="chart" *ngIf="loaded">
+                    <div id="crm_balance_overview_chart"></div>
+                </div>
+                <div class="load-chart" *ngIf="!loaded">
+                     <i class="ri-refresh-line rotate"></i>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

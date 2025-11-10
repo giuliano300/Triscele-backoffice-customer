@@ -1,0 +1,243 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li aria-current="page" class="breadcrumb-item active">{{title}} / Indirizzo di spedizione</li>
+  </ol>
+</nav>
+
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <mat-card class="trinta-card mb-10 bg-white border-none d-block">
+    <mat-card-content>
+      <div class="row g-3">
+        <div class="col-sm-4">
+          <label class="label d-block fw-medium mb-10">Nome</label>
+          <mat-form-field class="w-100">
+            <i-feather name="user"></i-feather>
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="shippingName" type="text">
+          </mat-form-field>
+        </div>
+      
+        <div class="col-sm-4">
+          <label class="label d-block fw-medium mb-10">Cognome</label>
+          <mat-form-field class="w-100">
+            <i-feather name="user"></i-feather>
+            <mat-label>Cognome</mat-label>
+            <input matInput formControlName="shippingLastName" type="text">
+          </mat-form-field>
+        </div>
+      
+        <div class="col-sm-4">
+          <label class="label d-block fw-medium mb-10">Ragione sociale</label>
+          <mat-form-field class="w-100">
+            <i-feather name="user"></i-feather>
+            <mat-label>Ragione sociale</mat-label>
+            <input matInput formControlName="shippingBusinessName" type="text">
+          </mat-form-field>
+        </div>
+      
+        <div class="col-sm-6">
+          <label class="label d-block fw-medium mb-10">Cellulare</label>
+          <mat-form-field class="w-100">
+            <i-feather name="phone"></i-feather>
+            <mat-label>Cellulare</mat-label>
+            <input matInput formControlName="shippingTelephone" type="text">
+          </mat-form-field>
+        </div>
+      
+        <div class="col-sm-6">
+          <label class="label d-block fw-medium mb-10">Email</label>
+          <mat-form-field class="w-100">
+            <i-feather name="mail"></i-feather>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="shippingEmail" type="text">
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-5">
+          <label class="label d-block fw-medium mb-10">Indirizzo</label>
+          <mat-form-field class="w-100">
+            <i-feather name="map"></i-feather>
+            <mat-label>indirizzo di spedizione</mat-label>
+            <input matInput formControlName="shippingAddress" type="text">
+          </mat-form-field>
+        </div>
+
+        <!-- Codice interno -->
+        <div class="col-sm-2">
+          <label class="label d-block fw-medium mb-10">CAP</label>
+          <mat-form-field class="w-100">
+            <i-feather name="map-pin"></i-feather>
+            <mat-label>Cap</mat-label>
+            <input matInput formControlName="shippingZipcode" type="number">
+          </mat-form-field>
+        </div>
+
+        <!-- Soglia -->
+        <div class="col-sm-2">
+          <label class="label d-block fw-medium mb-10">Provincia</label>
+          <mat-form-field class="w-100">
+            <i-feather name="map-pin"></i-feather>
+            <mat-label>Provincia</mat-label>
+            <mat-select formControlName="shippingProvince">
+              <mat-option *ngFor="let p of province" [value]="p">
+                {{ p | uppercase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        
+        <div class="col-sm-3">
+          <label class="label d-block fw-medium mb-10">Comune</label>
+          <mat-form-field class="w-100">
+            <i-feather name="map"></i-feather>
+            <mat-label>Comune</mat-label>
+            <input matInput formControlName="shippingCity" type="text">
+          </mat-form-field>
+        </div>
+          
+        <div class="col-sm-12">
+          <label class="label d-block fw-medium mb-10">Note cliente</label>
+          <mat-form-field class="w-100">
+            <i-feather name="file-text"></i-feather>
+            <mat-label>Note cliente</mat-label>
+            <textarea matInput formControlName="customerNote" style="min-height: 200px;"></textarea>
+          </mat-form-field>
+        </div>
+      
+        <div class="col-sm-12">
+          <label class="label d-block fw-medium mb-10">Tipo pagamento</label>
+          <mat-form-field class="w-100">
+            <i-feather name="credit-card"></i-feather>
+            <mat-label>Seleziona un tipo di pagamento</mat-label>
+            <mat-select formControlName="paymentMethod">
+              <mat-option *ngFor="let method of paymentMethods" [value]="method">
+                {{ method | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>        
+       </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li aria-current="page" class="breadcrumb-item active mt-10">Prodotti</li>
+    </ol>
+  </nav> 
+  <mat-card class="trinta-card mb-10 bg-white border-none d-block">
+    <mat-card-content>
+      <div class="row g-3">
+       <div class="col-sm-12">
+          <label class="label d-block fw-medium mb-10">Seleziona uno o più prodotti</label>
+          <!-- Input di ricerca con autocomplete -->
+          <mat-form-field class="w-100 mt-2">
+            <i-feather name="tag"></i-feather>
+            <input
+              matInput
+              placeholder="Cerca prodotti"
+              [formControl]="productCtrl"
+              [matAutocomplete]="auto"
+            >
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addProductToList($event.option.value)">
+              <mat-option *ngFor="let p of filteredProducts | async" [value]="p">
+                {{ p.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+      
+    <div formArrayName="products">
+      <div *ngFor="let group of productsForm.controls; let i = index" [formGroupName]="i" class="row compact-row">
+        
+        <div class="col-sm-1 center" *ngIf="group.get('isSubs')!.value === true"> <span class="sub-element"> <i class="ri-corner-down-right-line"></i> </span></div>
+        <div [ngClass]="group.get('isSubs')!.value === true ? 'col-sm-6' : 'col-sm-5'">
+          <label *ngIf="i === 0" class="label d-block fw-medium mb-10">Nome del prodotto</label>
+          <mat-form-field class="w-100">
+            <i-feather name="tag"></i-feather>
+            <mat-label *ngIf="group.get('isSubs')!.value === false">Nome del prodotto</mat-label>
+            <mat-label *ngIf="group.get('isSubs')!.value === true">Nome del sotto prodotto</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+        </div>
+
+        <div [ngClass]="group.get('isSubs')!.value === true ? 'col-sm-2' : 'col-sm-2'">
+          <label *ngIf="i === 0" class="label d-block fw-medium mb-10">Quantità</label>
+          <mat-form-field class="w-100">
+            <i-feather name="layers"></i-feather>
+            <mat-label *ngIf="group.get('isSubs')!.value === true">Quantità</mat-label>
+            <input matInput formControlName="quantity" type="number" [readonly]="group.get('isSubs')!.value === true">
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-2">
+          <label *ngIf="i === 0" class="label d-block fw-medium mb-10">Prezzo</label>
+          <mat-form-field class="w-100">
+            <span class="material-symbols-outlined in-mat">
+              euro
+            </span>
+            <input matInput formControlName="price" type="number" [readonly]="true">
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-1">
+          <label *ngIf="i === 0" class="label d-block fw-medium mb-10 text-end sub">Configura</label>
+          <span class="config" (click)="openConfigurator(group.value)" *ngIf="group.value.options" matTooltip="configura il prodotto">
+            <i class="ri-settings-line"></i>
+          </span>
+          <span class="config-disabled" *ngIf="!group.value.options" matTooltip="il prodotto non contiene opzioni">
+            <i class="ri-settings-6-line"></i>
+          </span>
+        </div>
+
+        <div class="col-sm-2">
+          <label *ngIf="i === 0" class="label d-block fw-medium mb-10 text-end sub">Subtotale</label>
+          <span class="subtotal-subs" *ngIf="group.get('isSubs')!.value === true">
+            <span class="delete" (click)="removeThis(i)">
+              <i class="ri-delete-bin-line"></i>
+            </span>
+          </span>
+          <span class="subtotal" *ngIf="group.get('isSubs')!.value === false">
+            <span class="material-symbols-outlined">
+              euro
+            </span>
+            {{ groupTotals[i] | number:'1.2-2' }}
+            <span class="delete" (click)="removeThis(i)">
+              <i class="ri-delete-bin-line"></i>
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Totale generale -->
+      <div class="row g-3 border-top pt-2 mt-2">
+        <div class="col-sm-10 text-end mt-20 grandTotalText">
+          Totale generale
+        </div>
+        <div class="col-sm-2 text-end mt-20 grandTotal">
+          {{ grandTotal | number:'1.2-2' }} €
+        </div>
+      </div>
+    </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="trinta-card mb-10 bg-white border-none d-block">
+    <mat-card-content>
+      <div class="row g-3">
+
+        <!-- Pulsanti -->
+        <div class="col-sm-6 mt-10 text-start">
+          <button mat-flat-button class="back" type="button" (click)="returnBack()">Indietro</button>
+        </div>
+        <div class="col-sm-6 mt-10 text-end">
+          <button mat-flat-button color="primary" type="submit" [disabled]="productForm.invalid">
+            Salva
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>
