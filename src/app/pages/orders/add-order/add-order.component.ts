@@ -40,7 +40,7 @@ import { Product } from '../../../interfaces/products';
 import { MatTooltip } from '@angular/material/tooltip';
 import { mapToProduct } from '../../../mapping/mapping';
 import { Customers } from '../../../interfaces/customers';
-import { sumSelectedOptionsPrice } from '../../../../main';
+import { calculateFinalPrice, sumSelectedOptionsPrice } from '../../../../main';
 
 registerLocaleData(localeIt);
 
@@ -531,6 +531,7 @@ export class AddOrderComponent {
       formData.status = undefined;
       formData.operatorId = undefined;
       delete formData.sectorId;
+      formData.isCustomer = true;
 
       if (this.id) {
         formData._id = this.id;
@@ -605,8 +606,5 @@ export class AddOrderComponent {
 
   }
 
-}
-function calculateFinalPrice(arg0: number, arg1: number, arg2: number, arg3: any): number {
-  throw new Error('Function not implemented.');
 }
 

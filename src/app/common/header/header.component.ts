@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
-    imports: [FeathericonsModule, MatButtonModule, MatMenuModule, NgClass, NgIf],
+    imports: [FeathericonsModule, MatButtonModule, MatMenuModule, NgClass],
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss',
     providers: [

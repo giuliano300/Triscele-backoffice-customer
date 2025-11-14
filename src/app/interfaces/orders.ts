@@ -31,4 +31,5 @@ export interface Order {
   orderProducts: OrderProducts[];
   orderChangeState?: OrderChangeState[];
   totalPrice: number;
+  isCustomer?: boolean
 }
