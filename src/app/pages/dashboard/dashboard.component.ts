@@ -17,6 +17,7 @@ import { ProductMovements } from '../../interfaces/productMovements';
 import { ProductMovementsService } from '../../services/Product-movements.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Customers } from '../../interfaces/customers';
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -57,6 +58,7 @@ export class DashboardComponent {
       private dialog: MatDialog,
       private statsService: StatsService,
       private productService: ProductService,
+      private socketService: SocketService,
       private productMovementsService: ProductMovementsService,
       @Inject(PLATFORM_ID) private platformId: any) {
         this.isBrowser = isPlatformBrowser(this.platformId);
@@ -79,16 +81,23 @@ export class DashboardComponent {
       location.href = "access-denied";
 
     this.loadStats();
+
+     // Sottoscrizione ai contatori in tempo reale
+    this.socketService.orders$.subscribe(val => this.orders = val);
+    this.socketService.quotations$.subscribe(val => this.quotations = val);
    }
 
 
    loadStats() {
     this.statsService.getStatsOfCustomer(this.y, this.customer!._id).subscribe((data) => {
-      this.orders = data.totalOrders.toLocaleString('it-IT');
-      this.quotations = data.totalQuotations.toLocaleString('it-IT');
+      this.orders = data.totalOrders;
+      this.quotations = data.totalQuotations;
       this.ordersByMonth = data.ordersByMonth;
       this.loaded = true;
       this.loadChart();
+
+      // Aggiorna il service con i valori iniziali
+      this.socketService.setInitialCounts(this.orders, this.quotations);
     });
    }
    
