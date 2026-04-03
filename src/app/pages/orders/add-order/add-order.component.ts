@@ -42,6 +42,7 @@ import { mapToProduct } from '../../../mapping/mapping';
 import { Customers } from '../../../interfaces/customers';
 import { calculateFinalPrice, sumSelectedOptionsPrice } from '../../../../main';
 
+
 registerLocaleData(localeIt);
 
 export const MY_DATE_FORMATS = {
@@ -445,8 +446,9 @@ export class AddOrderComponent {
 
       this.syncDiscount(group);
 
-      this.openConfigurator(mapToProduct(product));
-
+      Promise.resolve().then(() => {
+        this.openConfigurator(product.id!);
+      });    
     }    
     
     this.productCtrl.setValue('');
@@ -556,21 +558,47 @@ export class AddOrderComponent {
     }
   }
 
-  openConfigurator(c: Product){
-    if(c.options.length > 0){
-      const dialogRef = this.dialog.open(AddUpdateOptionsToOrderDialogComponent, {
-          data: c,
-          width: '80vw',
-          maxWidth: '1000px'
-      });
+  openConfigurator(productId: string) {
 
-      dialogRef.afterClosed().subscribe((result: ConfigProductToOrder) => {
-        if (result) 
-          this.addOrUpdateProductOptions(c, result);
-        else 
-          console.log("Close");
-      });
-    }
+    //console.log("ID PASSATO:", productId);
+    //console.log("FORM IDS:", this.productsForm.controls.map(c => c.get('_id')?.value));
+
+    const fg = this.productsForm.controls.find(
+      (c: AbstractControl) => c.get('_id')?.value === productId
+    ) as FormGroup;
+
+    //console.log("fg:" + fg);
+    if (!fg) return;
+
+    const productWithSelection = {
+      _id: fg.get('_id')?.value,
+      name: fg.get('name')?.value,
+      options: fg.get('options')?.value ?? [],      
+      selectedOptions: fg.get('selectedOptions')?.value ?? []
+    };
+
+    if(productWithSelection.options.length === 0 && productWithSelection.selectedOptions.length === 0)
+      return;
+
+    console.log()
+
+    const dialogRef = this.dialog.open(
+      AddUpdateOptionsToOrderDialogComponent,
+      {
+        data: productWithSelection,
+        width: '80vw',
+        maxWidth: '1000px',
+        panelClass: 'custom-dialog'
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((result: ConfigProductToOrder[]) => {
+      if (result) {
+        fg.get('selectedOptions')?.setValue(result);
+        fg.get('selectedOptions')?.updateValueAndValidity();
+        this.getFinalPrice();
+      }
+    });
   }
 
   addOrUpdateProductOptions(product: Product, result: ConfigProductToOrder) {
