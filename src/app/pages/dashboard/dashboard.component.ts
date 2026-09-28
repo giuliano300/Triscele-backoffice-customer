@@ -17,7 +17,7 @@ import { ProductMovements } from '../../interfaces/productMovements';
 import { ProductMovementsService } from '../../services/Product-movements.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Customers } from '../../interfaces/customers';
-import { SocketService } from '../../services/socket.service';
+import { NotificationStateService } from '../../services/notification-state.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -58,7 +58,7 @@ export class DashboardComponent {
       private dialog: MatDialog,
       private statsService: StatsService,
       private productService: ProductService,
-      private socketService: SocketService,
+      private notificationStateService: NotificationStateService,
       private productMovementsService: ProductMovementsService,
       @Inject(PLATFORM_ID) private platformId: any) {
         this.isBrowser = isPlatformBrowser(this.platformId);
@@ -83,8 +83,8 @@ export class DashboardComponent {
     this.loadStats();
 
      // Sottoscrizione ai contatori in tempo reale
-    this.socketService.orders$.subscribe(val => this.orders = val);
-    this.socketService.quotations$.subscribe(val => this.quotations = val);
+    this.notificationStateService.orders$.subscribe(val => this.orders = val);
+    this.notificationStateService.quotations$.subscribe(val => this.quotations = val);
    }
 
 
@@ -97,7 +97,7 @@ export class DashboardComponent {
       this.loadChart();
 
       // Aggiorna il service con i valori iniziali
-      this.socketService.setInitialCounts(this.orders, this.quotations);
+      this.notificationStateService.setInitialCounts(this.orders, this.quotations);
     });
    }
    
