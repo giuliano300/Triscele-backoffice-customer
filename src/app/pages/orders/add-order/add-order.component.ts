@@ -525,9 +525,13 @@ export class AddOrderComponent {
       formData.operatorId = undefined;
 
       formData.origin = "1";
-      formData.orderProducts = this.productsForm.value;
+      const calculatedTotalPrice = this.getFinalPrice();
+      formData.orderProducts = this.productsForm.value.map((product: any, index: number) => ({
+        ...product,
+        totalPrice: this.groupTotals[index] ?? 0
+      }));
 
-      formData.totalPrice = this.getFinalPrice();
+      formData.totalPrice = calculatedTotalPrice;
 
       //CAMPI SE E' PREVENTIVO
       formData.status = undefined;
