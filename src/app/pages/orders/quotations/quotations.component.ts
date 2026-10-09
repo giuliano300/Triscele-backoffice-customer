@@ -273,9 +273,9 @@ export class QuotationsComponent {
     const documentName = `Preventivo-${quoteNumber}`;
 
     const docDefinition = {
-      pageOrientation: 'landscape',
+      pageOrientation: 'portrait',
       pageSize: 'A4',
-      pageMargins: [40, 60, 40, 60],
+      pageMargins: [30, 40, 30, 40],
       defaultStyle: {
         fontSize: 11,
         color: '#333'
@@ -359,7 +359,7 @@ export class QuotationsComponent {
           style: 'section',
           table: {
             headerRows: 1,
-            widths: [140, '*', '*', '*', '*', '*', '*'],
+            widths: [100, '*', '*', '*', '*', '*', '*'],
             body: [
               ['Prodotto', 'Q.tà', 'Prezzo', 'Sconto €', 'Sconto 1 %', 'Sconto 2 %', 'Totale'].map(h => ({
                 text: h, style: 'tableHeader', margin: [5, 5, 5, 5]
