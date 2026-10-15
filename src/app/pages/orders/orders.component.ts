@@ -488,7 +488,7 @@ export class OrdersComponent {
       }
     };
 
-    pdfMake.createPdf(docDefinition).open();
+    pdfMake.createPdf(docDefinition).download(`${documentName}.pdf`);
   }
   
   DownloadDocOperator(item: Order) {
@@ -674,7 +674,7 @@ export class OrdersComponent {
       }
     };
 
-    pdfMake.createPdf(docDefinition).open();
+    pdfMake.createPdf(docDefinition).download(`${documentName}-operatore.pdf`);
   }
 
   DeleteItem(item: Order) {
